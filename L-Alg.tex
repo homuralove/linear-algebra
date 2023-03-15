@@ -798,7 +798,44 @@ $m\times n$行列$A$の成分を$a_{ij}$と書いたとき
       \end{matrix}
     \right)
   \end{equation}
+  \item[転置行列] $m\times n$行列$A$の行と列を入れ替えて得られる$n\times m$行列を$A$の転置行列といい、${}^{t}A$とかく。\footnote{他に$A^{t},{}^{T}A,A^{T}$などと書くこともある。物理の文脈では一番最後の記法が多い。}例えば
+    \begin{equation}
+      \left( 
+        \begin{matrix}
+          1 & 2 & 3 \\
+          4 & 5 & 6 
+        \end{matrix}
+      \right) \quad \overset{転置！}{\to} \quad\left( 
+        \begin{matrix}
+          1 & 4  \\
+          2 & 5   \\
+          3 & 6 
+        \end{matrix}
+      \right)
+    \end{equation}
+    転置行列を求めることを、「転置を取る」と表現する。
+  \item[対称行列] もとの行列と転置行列が一致するとき、その行列を対称行列という。例えば
+  \begin{equation}
+ \label{taisho}   \kakko{ \, 1 \, }\quad \left( 
+      \begin{matrix}
+        1 & 2  \\
+        2 & 4  
+      \end{matrix}
+    \right) \quad \left( 
+      \begin{matrix}
+        1 & 2 & 3 \\
+        2 & 5 & 6 \\
+        3 & 6 & 0
+      \end{matrix}
+    \right)
+  \end{equation}
+  なお、$n$次正方行列$A=(a_{ij})$が対称行列であるときの必要十分条件は
+  \begin{equation}
+    a_{ij}=a_{ji}
+  \end{equation}
+  である。
 \end{description}
+
 以上で一気に言葉を定義したので、おそらくすぐに慣れることは難しいだろう。例題を少し用意したので少し手を動かしてやってみてほしい。
 \begin{description}
   \item[例3.1] 次の行列の型、$(1,2)$成分、第2行、第3列をそれぞれ答えよ。
@@ -812,7 +849,7 @@ $m\times n$行列$A$の成分を$a_{ij}$と書いたとき
   \end{equation}
   \item[例3.2] 次の正方行列の型を答えよ。また、対角成分をすべて書き出し、足しあわせよ。
   \begin{equation}
-    \left( 
+  \label{rei32}  \left( 
       \begin{matrix}
         2 & 6 & 9 & 8\\
         0 & 2 & 7 & 0 \\
@@ -824,9 +861,14 @@ $m\times n$行列$A$の成分を$a_{ij}$と書いたとき
   \item[例3.3] 2次単位行列を具体的に書いてみよ。
   \item[例3.4] $(i,j)$成分が$2\delta_{ij}$で表される3次行列を具体的に書き表せ。 
   \item[例3.5] $(i,j)$成分が$2\delta_{i\, j+1}$で表される3次行列を具体的に書き表せ。 
+  \item[例3.6] (\ref{rei32})の転置行列を書け。
+  \item[例3.7] 実際に(\ref{taisho})の転置を取って元の行列と一致するか確かめよ。
 \end{description}
+
 \subsubsection{和・スカラー倍・積}
+
 演算の定義、和・スカラー倍の交換律、結合律、分配律。積の非可換性。いちおう逆行列。
+
 \subsection{連立1次方程式}
 \subsubsection{基本変形}
 \subsubsection{方程式を解く}
