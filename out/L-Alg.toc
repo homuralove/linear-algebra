@@ -1,0 +1,45 @@
+\contentsline {section}{\numberline {0}数学的記法における注意}{2}{section.0}% 
+\contentsline {subsection}{\numberline {0.1}集合}{2}{subsection.0.1}% 
+\contentsline {subsubsection}{\numberline {0.1.1}数の集合}{2}{subsubsection.0.1.1}% 
+\contentsline {subsubsection}{\numberline {0.1.2}直積}{3}{subsubsection.0.1.2}% 
+\contentsline {subsection}{\numberline {0.2}写像}{3}{subsection.0.2}% 
+\contentsline {paragraph}{例}{3}{section*.2}% 
+\contentsline {section}{\numberline {1}線形代数とは何か？}{3}{section.1}% 
+\contentsline {subsection}{\numberline {1.1}計算機において}{3}{subsection.1.1}% 
+\contentsline {subsubsection}{\numberline {1.1.1}例}{4}{subsubsection.1.1.1}% 
+\contentsline {section}{\numberline {2}ベクトル}{5}{section.2}% 
+\contentsline {subsection}{\numberline {2.1}基本事項}{5}{subsection.2.1}% 
+\contentsline {subsubsection}{\numberline {2.1.1}演算}{7}{subsubsection.2.1.1}% 
+\contentsline {paragraph}{距離}{8}{section*.3}% 
+\contentsline {paragraph}{コサイン類似度}{8}{section*.4}% 
+\contentsline {subsubsection}{\numberline {2.1.2}位置ベクトル}{8}{subsubsection.2.1.2}% 
+\contentsline {subsection}{\numberline {2.2}具体例}{9}{subsection.2.2}% 
+\contentsline {subsubsection}{\numberline {2.2.1}色の比較}{9}{subsubsection.2.2.1}% 
+\contentsline {subsubsection}{\numberline {2.2.2}Bag of Words}{10}{subsubsection.2.2.2}% 
+\contentsline {section}{\numberline {3}行列}{10}{section.3}% 
+\contentsline {subsection}{\numberline {3.1}基本事項}{11}{subsection.3.1}% 
+\contentsline {subsubsection}{\numberline {3.1.1}行列}{11}{subsubsection.3.1.1}% 
+\contentsline {subsubsection}{\numberline {3.1.2}和・スカラー倍・積}{14}{subsubsection.3.1.2}% 
+\contentsline {subsection}{\numberline {3.2}連立1次方程式}{14}{subsection.3.2}% 
+\contentsline {subsubsection}{\numberline {3.2.1}基本変形}{14}{subsubsection.3.2.1}% 
+\contentsline {subsubsection}{\numberline {3.2.2}方程式を解く}{14}{subsubsection.3.2.2}% 
+\contentsline {subsubsection}{\numberline {3.2.3}正則行列・逆行列}{14}{subsubsection.3.2.3}% 
+\contentsline {subsection}{\numberline {3.3}行列式}{14}{subsection.3.3}% 
+\contentsline {subsubsection}{\numberline {3.3.1}余因子展開}{14}{subsubsection.3.3.1}% 
+\contentsline {subsubsection}{\numberline {3.3.2}外積}{14}{subsubsection.3.3.2}% 
+\contentsline {section}{\numberline {4}ベクトル空間}{14}{section.4}% 
+\contentsline {subsection}{\numberline {4.1}基本事項}{14}{subsection.4.1}% 
+\contentsline {subsubsection}{\numberline {4.1.1}定義}{14}{subsubsection.4.1.1}% 
+\contentsline {subsubsection}{\numberline {4.1.2}空間という言葉}{14}{subsubsection.4.1.2}% 
+\contentsline {subsection}{\numberline {4.2}1次結合と1次独立}{14}{subsection.4.2}% 
+\contentsline {subsection}{\numberline {4.3}基底と次元}{14}{subsection.4.3}% 
+\contentsline {subsubsection}{\numberline {4.3.1}基底の変換}{14}{subsubsection.4.3.1}% 
+\contentsline {section}{\numberline {5}線形写像}{14}{section.5}% 
+\contentsline {subsection}{\numberline {5.1}写像}{14}{subsection.5.1}% 
+\contentsline {subsection}{\numberline {5.2}基本事項}{14}{subsection.5.2}% 
+\contentsline {subsection}{\numberline {5.3}表現行列}{14}{subsection.5.3}% 
+\contentsline {section}{\numberline {6}対角化}{14}{section.6}% 
+\contentsline {subsection}{\numberline {6.1}固有値と固有ベクトル}{15}{subsection.6.1}% 
+\contentsline {subsubsection}{\numberline {6.1.1}線形変換において}{15}{subsubsection.6.1.1}% 
+\contentsline {subsubsection}{\numberline {6.1.2}一般の変換において}{15}{subsubsection.6.1.2}% 
+\contentsline {subsection}{\numberline {6.2}対角化}{15}{subsection.6.2}% 
