@@ -2,6 +2,7 @@
 \usepackage[dvipdfmx]{graphicx}
 \usepackage{braket}
 \usepackage{bm,latexsym,amsmath,amssymb,amsfonts,mathrsfs}
+\usepackage{amsthm}
 \usepackage{tensor}
 \usepackage{comment}
 %\usepackage{physics}
@@ -13,9 +14,13 @@
 \usetikzlibrary {arrows.meta}
 \usetikzlibrary {bending}
 \input{colordvi.tex}
+\usepackage{ascmac}
+\usepackage{framed}
 
 \setcounter{tocdepth}{3}%目次にsubsubsectionまで入れる
 
+\theoremstyle{definition}%定理環境の定義
+\newtheorem{thm}{定理}[section]%これで(セクション番号.定理番号)という感じになる。
 
 \newcommand{\kakko}[1]{\left(#1 \right)} %丸括弧()
 \newcommand{\kkakko}[1]{\left[ #1 \right]} %角括弧[]
@@ -374,6 +379,7 @@ $n$成分をもつベクトル$\vec{v}$は
 成分の数が違うときは和や積を定義できないことに注意。
 なお、単に積ではなく内積という言葉を用いたのは外積と呼ばれる積もあるためである。
 外積はあとでやるかも。
+\begin{framed}
 \begin{description}
   \item[スカラー倍] あるベクトル$\vec{v}$をスカラー$a$倍したとき、各成分が$a$倍される。
   \begin{equation}
@@ -422,6 +428,7 @@ $n$成分をもつベクトル$\vec{v}$は
 \end{equation}
 と書ける。この書き方についてはきちんと図的な表し方から納得できることを確認してほしい。
 \end{description}
+\end{framed}
 また、以上に関係する諸概念についても紹介する。
 \paragraph{距離}ベクトルどうしの距離を定義したい。
 
@@ -639,7 +646,7 @@ $xy$平面上で図\ref{Aab}のようにA$(a,b)$という点があったとす�
 \subsection{基本事項}
 行列について、ゼロ行列、正方行列、単位行列、対角行列、スカラー行列、上三角行列、下三角行列、転置、対称行列、反対称行列(交代行列)。行ベクトル、列ベクトル。添字。
 \subsubsection{行列}
-横と縦に長方形に数を並べたものを{\bf 行列}という。並べられた数をそれぞれ{\bf 成分}といい、数は$()$や$[]$で囲む。
+横と縦に長方形に数を並べたものを{\bf 行列}という。並べられた数をそれぞれ{\bf 成分}といい、数は$(\,)$や$[\,]$で囲む。
 横に並んだ成分を{\bf 行}、縦に並んだ成分を{\bf 列}という。
 例えば3行4列の行列であるとすれば成分を$a_{ij}(i=1,2,3,\, j=1,2,3,4)$のように表して
 \begin{equation}\left(
@@ -684,6 +691,7 @@ $m\times n$行列$A$の成分を$a_{ij}$と書いたとき
 \end{equation}
 と略記することもある。なお、行列の型が明らかなときは${}_{m\times n}$を省略することもある。
 以下にいくつか行列に関する言葉を用意する。多いので少しずつ覚えてほしい。また、添字の記法を多用しているのでこれも慣れていくことをおすすめする。
+\begin{framed}
 \begin{description}
   \item[$1\times 1$行列] $(a)$のように表されるがこの場合普通の数$a$と同一視して単に$a$と表す。
   \item[行列の相等] 2つの行列$A$と$B$が{\bf 等しい}とは、それぞれの型が同じで、対応する成分がそれぞれすべて等しいことを意味する。すなわち、$A=(a_{ij})_{m\times n}$と$B=(b_{kl})_{p\times q}$において$m=p$かつ$n=q$で、任意の$i,j$において$a_{ij}=b_{ij}$が成り立つとき、
@@ -835,7 +843,7 @@ $m\times n$行列$A$の成分を$a_{ij}$と書いたとき
   \end{equation}
   である。
 \end{description}
-
+\end{framed}
 以上で一気に言葉を定義したので、おそらくすぐに慣れることは難しいだろう。例題を少し用意したので少し手を動かしてやってみてほしい。
 \begin{description}
   \item[例3.1] 次の行列の型、$(1,2)$成分、第2行、第3列をそれぞれ答えよ。
@@ -883,10 +891,172 @@ $m\times n$行列$A$の成分を$a_{ij}$と書いたとき
 
 
 %演算の定義、和・スカラー倍の交換律、結合律、分配律。積の非可換性。いちおう逆行列。
-\subsubsection{和}
+\subsubsection{和とスカラー倍}
 さて、行列に関する演算を定義していく。まず{\bf 和}について考える。
-ともに$n\times m$行列である$A$と$B$に対して和を定義する。
-\subsubsection{スカラー倍}
+ともに$n\times m$行列である$A$と$B$に対して和を、{\bf 各成分同士を足すこと}と定義する。型が違う行列については演算が定義できないことに注意せよ。
+添字を用いて書き表わせば
+\begin{equation}
+  A=(a_{ij})_{n\times m},\quad B=(b_{ij})_{n\times m}
+\end{equation}
+に対して和$A+B$を
+\begin{equation}
+  (A+B)_{n\times m}=(a_{ij}+b_{ij})_{n\times m}
+\end{equation}
+と定義する。例えば$2\times 3$行列の和は
+\begin{equation}
+  \left( 
+    \begin{matrix}
+      a & b & c \\
+      d & e & f
+    \end{matrix}
+  \right)
++
+\left( 
+  \begin{matrix}
+    g & h & i \\
+    j & k & l
+  \end{matrix}
+\right)=\left( 
+  \begin{matrix}
+    a+g & b+h & c+i \\
+    d+j & e+k & f+l
+  \end{matrix}
+\right)
+\end{equation}
+と書かれる。\\
+次に{\bf スカラー倍}を定義する。
+スカラー、すなわち大きさのみを持つ数\footnote{単に実数や複素数と思えばよい。}$c$に対して、$n\times m$行列$A$の$c$によるスカラー倍とは、{\bf すべての成分を$c$倍するもの}と定義する。
+ここでも添字を用いて表せば
+\begin{equation}
+  cA = (ca_{ij})_{n\times m}
+\end{equation}
+である。
+例えば次の$2\times 3$行列を$c$倍すると
+\begin{equation}
+  c \left( 
+       \begin{matrix}
+        1 & 2 & 4 \\
+        7 & 3 & 6
+      \end{matrix}
+    \right)
+    =
+    \left( 
+      \begin{matrix}
+        c & 2c & 4c \\
+        7c & 3c & 6c
+      \end{matrix}
+    \right)
+\end{equation}
+となる。
+例題として次の計算をせよ。
+\begin{description}
+  \item[例3.8] 
+  \begin{equation}
+    \left(  
+      \begin{matrix}
+        1 & 2 & 4 \\
+        7 & 3 & 6
+      \end{matrix}
+    \right)+\left(  
+      \begin{matrix}
+        3 & 2 & 1 \\
+        5 & 6 & 7
+      \end{matrix}
+    \right)
+  \end{equation}
+  \item[例3.9] 
+  \begin{equation}
+   3 \left( 
+      \begin{matrix}
+        2 & 6 & 9 \\
+        0 & 2 & 7  \\
+        3 & 6 & 9 
+      \end{matrix}
+    \right)
+  \end{equation}
+  \item[例3.10] \begin{equation}
+    \left(  
+      \begin{matrix}
+        1 & 2  \\
+        2 & -3 
+      \end{matrix}
+    \right)+ 2 \left(  
+      \begin{matrix}
+        3 & 1 \\
+        -1 & 1 
+      \end{matrix}
+    \right)
+  \end{equation}
+\end{description}
+ここで$(-1)$倍について述べておく。
+便利な記法として
+\begin{equation}
+  (-1)A=-A
+\end{equation}
+と書く。また、
+\begin{equation}
+  A+(-B)=A-B
+\end{equation}
+と書くことに注意せよ。
+和とスカラー倍について以下の定理が成り立つ。これは後に扱うベクトル空間が満たすべき基本的性質である。
+\begin{screen}
+  \begin{thm}[和とスカラー倍]
+  $m\times n$行列$A,\, B,\, C$またゼロ行列$O_{m,n}$とスカラー$c, \, d$に対して、以下の$(\mathrm{A})\sim (\mathrm{H})$が成り立つ。
+  \begin{enumerate}
+    \item  $A+B=B+A\quad $(和の交換律)
+    \item  $(A+B)+C=A+(B+C)\quad $(和の結合律)
+    \item $A+O_{m,n}=O_{m,n}+A=A$
+    \item $c(dA)=(cd)A\quad $(スカラー倍の結合律)
+    \item $(c+d)A=cA+dA \quad $(分配律I)
+    \item $c(A+B)=cA+cB \quad $(分配律II)
+    \item $1A=A$
+    \item $0A=O_{m,n}$
+  \end{enumerate}
+  \end{thm}
+\end{screen}
+なお和の結合律により$(A+B)+C=A+(B+C)=A+B+C$と書いてよい。
+ここで対称行列と対になる概念として{\bf 交代行列}を定義する。
+\begin{framed}
+\begin{description}
+  \item[交代行列] ${}^{t}A=-A$となる正方行列$A$を{\bf 交代行列}、あるいは{\bf 反対称行列}という。
+\end{description}
+\end{framed}
+例えば
+\begin{equation}
+  \left(  
+      \begin{matrix}
+        0 & 2  \\
+        -2 & 0
+      \end{matrix}
+    \right), \quad \left(  
+      \begin{matrix}
+        0 & 1 & 2\\
+        -1 & 0 & 3\\
+        -2& -3 & 0 
+      \end{matrix}
+    \right)
+\end{equation}
+などである。
+\begin{screen}
+  \begin{thm}
+    $n$次正方行列$A=(a_{ij})_{n\times n}$が交代行列であるための必要十分条件は
+    \begin{equation}
+  \label{kotai}    a_{ij}=-a_{ji} \quad (i,j=1,2,\cdots ,n)
+    \end{equation}
+    であり、交代行列の対角成分はすべて0である。
+  \end{thm}
+\end{screen}
+この主張を示していく。(\ref{kotai})は定義式${}^{t}A=-A$を成分で表したものであるため、必要十分条件である。
+次に対角成分がすべて0であることを示す。
+対角成分は$i=j$であるため、(\ref{kotai})と合わせて
+\begin{equation}
+  a_{ii}=-a_{ii}
+\end{equation}
+が成り立つ。よって
+\begin{equation}
+  2a_{ii}=0  \quad  \therefore \, a_{ii}=0
+\end{equation}
+である。
 \subsubsection{積}
 \subsection{連立1次方程式}
 \subsubsection{基本変形}
