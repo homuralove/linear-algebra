@@ -3,6 +3,7 @@
 \usepackage{braket}
 \usepackage{bm,latexsym,amsmath,amssymb,amsfonts,mathrsfs}
 \usepackage{amsthm}
+\usepackage{bm}
 \usepackage{tensor}
 \usepackage{comment}
 %\usepackage{physics}
@@ -1058,7 +1059,21 @@ $m\times n$行列$A$の成分を$a_{ij}$と書いたとき
 \end{equation}
 である。
 \subsubsection{積}
+$l\times \bm{m}$行列$A=(a_{ij})_{l\times \bm{m}}$と$\bm{m}\times n$行列$B=(b_{jk})_{\bm{m}\times n}$の{\bf 積}$AB$を次のように定義する。
+\begin{equation}
+  AB=(c_{ik})_{l\times n},\quad c_{ik}=\sum_{j=1}^{m} a_{ij}b_{jk}\quad (i=1,2,\cdots ,l,\, k=1,2,\cdots , n)
+\end{equation}
+この式の意味は、「行列$AB$の$(i,k)$成分$c_{ik}$が、$A$の行の成分と$B$の列の成分のそれぞれをかけて足したものとなるように定義する」ということである
+一般にこの積の順序は可換ではないことに注意。
+この節の始めの文章では太字にして強調してあるように、$A$の列の個数と$B$の行の個数が等しいときにのみ積が定義されるので、これを入れ替えると定義できなくなるためである。
+%図を入れて説明したい。
+\subsection{具体例}
+
+\subsubsection{拡大・縮小}
+
+\subsubsection{回転}
 \subsection{連立1次方程式}
+
 \subsubsection{基本変形}
 \subsubsection{方程式を解く}
 \subsubsection{正則行列・逆行列}
