@@ -15,8 +15,14 @@
 \usetikzlibrary {arrows.meta}
 \usetikzlibrary {bending}
 \input{colordvi.tex}
+\usepackage{xcolor}%色
+
+
 \usepackage{ascmac}
 \usepackage{framed}
+\usepackage{tcolorbox}%式に色
+\tcbuselibrary{theorems}
+\tcbuselibrary{theorems,skins}
 
 \setcounter{tocdepth}{3}%目次にsubsubsectionまで入れる
 
@@ -57,7 +63,8 @@
 \title{AI入門としての線形代数}
 \author{TiroDuetto}
 \date{\today}
-\pagestyle{empty}
+\pagestyle{plain}
+
 \begin{document}
 \maketitle
 
@@ -69,6 +76,7 @@
 なお、コンピュータとを計算機と呼んでいるのはそういう文化の人間が作った資料であるためであって深い意味はない。ゆえに表現が統一されていないところもあると思う。
 このノートでは「我々が扱う空間は3次元Euclid空間であり、これは内積の定義された計量ベクトル空間である」という文章が理解できるところまで進めたら幸いと思う。
 また、目次の5章と6章あたりの内容まで理解できれば計算機を用いた機械学習などにも応用できるだろうと期待している。
+なお、このレジュメでは章立てがa.b.cのようになっているが、aを章、bを節、cを項と呼んでいる。
 \end{abstract}
 \tableofcontents
 \setcounter{section}{-1}
@@ -195,7 +203,7 @@ $c \in C, \, d\in D$を用いた$(c,d)$全体の集合のことを$C$と$D$の{\
 とできる。これがベクトルと行列を用いれば一つの形式によって表せて便利だという話である。
 つまり、
 \begin{equation}
-  \left( \begin{matrix}
+  \label{saisho}\left( \begin{matrix}
     1500 \\
     1760
   \end{matrix} \right)=\left( \begin{matrix}
@@ -417,7 +425,7 @@ $n$成分をもつベクトル$\vec{v}$は
   。\footnote{群論の言葉では演算してももとの形のままとなる元を単位元、足して単位元となる元を逆元と呼ぶ。ここでは単位ベクトルとの言葉遣いが紛らわしいのであまり使わないようにする。}
   \item[内積] ベクトル特有の演算である。これは2つのベクトルからスカラーを作り出すものである。$\vec{v},\vec{w}$を$n$成分のベクトルとすると
   \begin{equation}
-    \vec{v}\cdot \vec{w} = v_{1}w_{1}+\cdots + v_{n}w_{n}=\sum_{i=1}^{n}v_{i}w_{i}
+  \label{in-prod}  \vec{v}\cdot \vec{w} = v_{1}w_{1}+\cdots + v_{n}w_{n}=\sum_{i=1}^{n}v_{i}w_{i}
   \end{equation}
 と定義される。内積を$(\vec{v},\vec{w})$や$\braket{\vec{v},\vec{w}}$で表すこともある。ベクトルのノルムはこの内積を用いて定義され、
 \begin{equation}
@@ -1016,7 +1024,7 @@ $m\times n$行列$A$の成分を$a_{ij}$と書いたとき
   \end{thm}
 \end{screen}
 なお和の結合律により$(A+B)+C=A+(B+C)=A+B+C$と書いてよい。
-ここで対称行列と対になる概念として{\bf 交代行列}を定義する。
+この項の最後に、対称行列と対になる概念として{\bf 交代行列}を定義する。
 \begin{framed}
 \begin{description}
   \item[交代行列] ${}^{t}A=-A$となる正方行列$A$を{\bf 交代行列}、あるいは{\bf 反対称行列}という。
@@ -1068,29 +1076,354 @@ $l\times \bm{m}$行列$A=(a_{ij})_{l\times \bm{m}}$と$\bm{m}\times n$行列$B=(
 この節の始めの文章では太字にして強調してあるように、$A$の列の個数と$B$の行の個数が等しいときにのみ積が定義されるので、これを入れ替えると定義できなくなるためである。
 %図を入れて説明したい。
 
+\begin{figure}[H]
+  
 \begin{equation}
+  \left( 
+   \begin{matrix}
+            & \cdots &    & \cdots & \\
+          \textcolor{red}{a_{i1}} & \cdots & \textcolor{blue}{a_{ij}}   & \cdots &  \textcolor{green}{a_{im}}  \\
+            & \cdots &     & \cdots & 
+   \end{matrix}
+ \right)    \left( 
+  \begin{matrix}
+           & \textcolor{red}{b_{1k}} & \\
+    \vdots & \vdots & \vdots\\
+           & \textcolor{blue}{b_{jk}} & \\
+    \vdots & \vdots & \vdots \\
+           & \textcolor{green}{b_{mk}} & 
+  \end{matrix}
+\right)
+\end{equation}
+  \caption{この行列の積の第$(i,k)$成分は、ここで同じ色をつけたところをかけて足したものとなる。順にかけてすべて足すのである。}
+\end{figure}
+以下の計算を試してみよ。
+計算の結果として型がどうなるかをきちんと注意すること。
+\begin{description}
+  \item[例3.11] $2$次正方行列どうしの積。これはすべて書いてしまっているが、きちんと計算があっているか確認してほしい。\begin{equation}
     \left( 
      \begin{matrix}
-              & \cdots &    & \cdots & \\
-       a_{i1} & \cdots & a_{ij}   & \cdots &  a_{im}  \\
-              & \cdots &     & \cdots & 
+         a & b \\
+         c & d
      \end{matrix}
-   \right)    \left( 
+   \right)\left( 
     \begin{matrix}
-             & b_{1k} & \\
-      \vdots & \vdots & \vdots\\
-             & b_{jk} & \\
-      \vdots & \vdots & \vdots \\
-             & b_{mk} & 
+        e & f \\
+        g & h
+    \end{matrix}
+  \right)=\left( 
+    \begin{matrix}
+        ae+bg & af+bh \\
+        ce+dg & cf+dh
     \end{matrix}
   \right)
+  \end{equation}
+  \item[例3.12(a)] $2$次正方行列どうしの積。
+  \begin{equation}
+    \left( 
+     \begin{matrix}
+         1 & 2 \\
+         3 & 4
+     \end{matrix}
+   \right)\left( 
+    \begin{matrix}
+        5 & 6 \\
+        7 & 8
+    \end{matrix}
+  \right)
+  \end{equation}
+  \item[例3.12(b)] $2$次正方行列どうしの積。
+  \begin{equation}
+    \left( 
+    \begin{matrix}
+        5 & 6 \\
+        7 & 8
+    \end{matrix}
+  \right)\left( 
+    \begin{matrix}
+        1 & 2 \\
+        3 & 4
+    \end{matrix}
+  \right)
+  \end{equation}
+  \item[例3.13] $2\times 3$行列と$3\times 1$行列の積。
+  \begin{equation}
+    \left( 
+     \begin{matrix}
+         0 & 1 & 2\\
+         1 & 2 & 0
+     \end{matrix}
+   \right)\left( 
+    \begin{matrix}
+        3\\
+        4\\
+        5
+    \end{matrix}
+  \right)
+  \end{equation}
+  \item[例3.14] 3次正方行列どうしの積。
+  \begin{equation}
+    \left( 
+     \begin{matrix}
+         0 & 1 & 2\\
+         1 & 2 & 0\\
+         2 & 0 & 1
+     \end{matrix}
+   \right)\left( 
+    \begin{matrix}
+        1 & 0 & 0 \\
+        0 & 1 & 0 \\
+        0 & 0 & 1 \\
+    \end{matrix}
+  \right)
+  \end{equation}
+\item[例3.15] $2\times 1$行列と$1\times 2$行列の積。
+\begin{equation}
+  \left( 
+   \begin{matrix}
+        1 \\
+        2 
+   \end{matrix}
+ \right)\left( 
+  \begin{matrix}
+      3 & 4
+  \end{matrix}
+\right)
+\end{equation}
+\item[例3.16] $1\times 2$行列と$2\times 1$行列の積。
+\begin{equation}
+  \left( 
+   \begin{matrix}
+        1 & 2 
+   \end{matrix}
+ \right)\left( 
+  \begin{matrix}
+       3 \\
+       4
+  \end{matrix}
+\right)
 \end{equation}
 
+\end{description}
+例3.12は積の順序を入れ替えただけである。
+前述の通り、積の順序が可換で無いことがわかる。
+$n$次正方行列の$A,B$について、積$AB$と$BA$はともに$n$次正方行列となるが、これらが一致するとは限らないのである。
+$AB=BA$が成立するとき、この2つの行列$A$と$B$は{\bf 可換}である、または{\bf 交換可能}であるという。
+なお、可換でないときは{\bf 非可換}であるという。
+例えば、任意の行列$A$に対して、その行列と積の演算が可能な型の単位行列$I$との積は可換である。
+例3.14のように行列の形は変わらない。
+\begin{equation}
+\label{tanni-gyoertu}  AI=IA=A
+\end{equation}
 
+また、例3.15,3.16は行ベクトルや列ベクトルの積と見れることに注目してほしい。例3.15は2次正方行列となるが、例3.16は1次正方行列、すなわち通常の数と見なせる。
+計算過程を細かく見れば、内積の計算(\ref{in-prod})と同じであることに気づく。
+よって$n\times 1$行列としての$n$次列ベクトル$\vc{v},\vc{w}$の{\bf 内積}が次のように表せる。
+行列の考えから、前側のベクトルは転置を取って$1\times n$行列である行ベクトルにする。
+\begin{equation}
+  \vc{v}\cdot\vc{w}={}^{t}\vc{v}\vc{w}=\kakko{v_{1} \quad \cdots \quad v_{n} }
+  \kakko{\begin{matrix}
+    w_{1}\\
+    \vdots \\
+    w_{n}
+  \end{matrix}
+  }=v_{1}w_{1}+\cdots +v_{n}w_{n}
+\end{equation}
+これ以降、行列の和や積について考えるときは必ず演算が可能な型であるものとする。
+\begin{screen}
+  \begin{thm}
+    $A,B,C$を行列とすると、次の(A)$\sim$(D)が成り立つ。
+    \begin{enumerate}
+      \item $(AB)C=A(BC)$　(積の結合律) 
+      \item $(A+B)C=AC+BC$　(分配律I)
+      \item $A(B+C)=AB+AC$ (分配律II)
+      \item スカラー$c$に対して$(cA)B=A(cB)=c(AB)$
+    \end{enumerate}
+  \end{thm}
+\end{screen}
+なお、積の結合律より$(AB)C=A(BC)=ABC$と括弧を省略して書いてよい。
+スカラー行列が$cI$と書けることから、(\ref{tanni-gyoertu})と合わせて考えればスカラー行列をかけることはスカラー倍と同じ意味があることがわかる。
+
+積の結合律より、正方行列にはべき乗、すなわち同じ正方行列を何度もかけることが考えられる。
+正方行列$A$に対して、これを$n$回($n=0,1,2,\cdots$)かけたものを$A^{n}$と書いて、$A$の{\bf $n$乗}という。
+ただし、$n=0$のとき$A^{0}=I$とする。
+通常の数のように以下の{\bf 指数法則}が成り立つ。
+\begin{equation}
+  A^{n}A^{m}=A^{n+m},\quad (A^{n})^{m}=A^{nm} \quad(n,m=0,1,2,\cdots )
+\end{equation}
+次の計算をせよ。
+\begin{description}
+  \item[例3.17] 
+  \begin{equation}
+  \kakko{\begin{matrix}
+    0&1\\
+    1&0
+  \end{matrix} }^{3}
+  \end{equation}
+  \item[例3.18]   \begin{equation}\kakko{\begin{matrix}
+    0&1\\
+    0&0
+  \end{matrix}}^{2}
+\end{equation}
+\end{description}
+ここで例3.18を見るとわかるように、通常の数の場合とは違って、ゼロ行列でなくとも何度かかけてゼロ行列になる行列がある。
+\begin{framed}
+  \begin{description}
+    \item[べきゼロ行列] ある自然数$n$に対して$A^{n}=O$となるような行列を{\bf べきゼロ行列}という。
+  \end{description}
+  \end{framed}
+この項の最後に、転置と行列の演算の関係について述べておく。
+\begin{screen}
+  \begin{thm}
+    $A,B$を行列とすると、次の(A)$\sim$(C)が成り立つ。
+    \begin{enumerate}
+      \item ${}^{t}(A+B)={}^{t}A+{}^{t}B$ 
+      \item ${}^{t}(AB)={}^{t}B\,{}^{t}A$
+      \item スカラー$c$に対して${}^{t}(cA)=c\,{}^{t}A$
+    \end{enumerate}
+  \end{thm}
+\end{screen}
+積の転置を取ると、順序が入れ替わることに注意である。
 \subsection{具体例}
-
+以上の積の解説から(\ref{saisho})の例の気持ちが少しだけわかるかもしれない。
+しかし、行列の積の利用としてわかりやすいのは図形への応用である。
+例えば座標$(x,y)$を何かの変換を施して$(x',y')$にすることは、変換行列$A=(a_{ij})_{2\times 2}$を用いて、点を位置ベクトルで表し、
+\begin{equation}
+ \label{1ji} \kakko{\begin{matrix}
+ a_{11} & a_{12}  \\
+ a_{21} & a_{22}
+  \end{matrix}}
+  \kakko{\begin{matrix}
+ x  \\
+ y
+  \end{matrix}}=
+  \kakko{\begin{matrix}
+ x'  \\
+ y'
+  \end{matrix}}
+\end{equation}
+のように書ける。詳しくは後の章で述べるが、このような行列による変換を線形変換、または1次変換という。
+\begin{framed}
+  \begin{description}
+    \item[恒等変換] 
+    単位行列をかけても形は変わらないので、この変換は恒等変換と呼ばれる。
+    \begin{equation}
+      \kakko{\begin{matrix}
+      1 & 0  \\
+      0 & 1
+      \end{matrix}}
+      \kakko{\begin{matrix}
+     x  \\
+     y
+      \end{matrix}}=
+      \kakko{\begin{matrix}
+     x  \\
+     y
+      \end{matrix}}
+    \end{equation}
+  \end{description}
+\end{framed}
+図形は点の集合であるため、変換をそれぞれの点に施すことで画像の変換処理を行うことができる。(\ref{1ji})は1つの点ついてのみだが、複数の点について同時に変換することもできる。
+変換されるベクトルを位置ベクトル$\vc{r}_{i}=(x_{i},y_{i})$を2つ列方向に並べて
+\begin{equation}
+  X=(\vc{r}_{1}\quad \vc{r}_{2})=
+  \kakko{
+    \begin{matrix}
+      x_{1} & x_{2}\\
+      y_{1} & y_{2}
+    \end{matrix}
+  }
+\end{equation}
+と行列にすればよい。実際に$AX$がそれぞれの点$\vc{r}_{i}$を変換していることを確かめよ。
 \subsubsection{拡大・縮小}
+まず、図形を$2$倍に拡大することを考える。つまり、点の位置を原点に対して$2$倍離れた場所に移動させればよい。
+例えば、$(2,1)\to (4,2)$としたい。
+\begin{equation}
+  \kakko{ 
+    \begin{matrix}
+      2\\
+      1
+    \end{matrix}
+  } \to 
+    \kakko{ 
+      \begin{matrix}
+        4\\
+        2
+      \end{matrix}
+    } 
+\end{equation}
 
+\begin{figure}[H]
+  \centering
+  \begin{tabular}{cc}  
+    \begin{minipage}[t]{0.3\linewidth}
+      \centering
+      \begin{tikzpicture}
+        \node (O) at (-0.5,-0.5) {O};%原点
+       \coordinate (A) at (2,1);
+       \coordinate (Ax) at (2,0)node [below] at (Ax) {$2$};
+       \coordinate (Ay) at (0,1)node [left] at (Ay) {$1$};
+       \coordinate (x) at (3,0)node [right] at (x) {$x$};
+       \coordinate (y) at (0,3)node [right] at (y) {$y$};
+
+        \fill (A)circle(1pt) node[above]{A};
+        \draw[->](-1,0)--(3,0);%x軸
+        \draw[->](0,-1)--(0,3);%y軸
+        \draw[dotted](Ax)--(A);
+        \draw[dotted](Ay)--(A);
+        \draw[->](0,0)--(A);
+      \end{tikzpicture}
+\caption{点A$(2,1)$}
+\label{kakudai}
+    \end{minipage} &
+    \begin{minipage}[t]{0.3\linewidth}
+      \centering      \begin{tikzpicture}
+        \node (O) at (-0.5,-0.5) {O};%原点
+       \coordinate (A) at (4,2);
+       \coordinate (Ax) at (4,0)node [below] at (Ax) {$4$};
+       \coordinate (Ay) at (0,2)node [left] at (Ay) {$2$};
+       \coordinate (x) at (5,0)node [right] at (x) {$x$};
+       \coordinate (y) at (0,3)node [right] at (y) {$y$};
+
+        \fill (A)circle(1pt) node[above]{A};
+        \draw[->](-1,0)--(5,0);%x軸
+        \draw[->](0,-1)--(0,3);%y軸
+        \draw[dotted](Ax)--(A);
+        \draw[dotted](Ay)--(A);
+        \draw[->](0,0)--(A);
+      \end{tikzpicture}
+\caption{点A$'(4,2)$}
+    \end{minipage}
+  \end{tabular}
+\end{figure}
+このような変換は次の行列を用いて実現する。
+\begin{equation} 
+  \kakko{\begin{matrix}
+    2 & 0\\
+    0 & 2
+  \end{matrix}}
+\end{equation}
+実際、次のようになることが確かめられる。
+\begin{equation}
+  \kakko{\begin{matrix}
+    2 & 0\\
+    0 & 2
+  \end{matrix}}\kakko{\begin{matrix}
+    2\\
+    1
+  \end{matrix}}=\kakko{\begin{matrix}
+    4\\
+    2
+  \end{matrix}}
+\end{equation}
+もっと一般に$x$方向に$a$倍、$y$方向に$b$倍したいときは
+\begin{equation} 
+  \kakko{\begin{matrix}
+    a & 0\\
+    0 & b
+  \end{matrix}}
+\end{equation}
+を用いればよい。
 \subsubsection{回転}
 \subsection{連立1次方程式}
 
