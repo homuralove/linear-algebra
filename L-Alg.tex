@@ -1306,7 +1306,7 @@ $AB=BA$が成立するとき、この2つの行列$A$と$B$は{\bf 可換}であ
 \begin{framed}
   \begin{description}
     \item[恒等変換] 
-    単位行列をかけても形は変わらないので、この変換は恒等変換と呼ばれる。
+    単位行列をかけても形は変わらないので、この変換は{\bf 恒等変換}と呼ばれる。
     \begin{equation}
       \kakko{\begin{matrix}
       1 & 0  \\
@@ -1384,7 +1384,6 @@ $AB=BA$が成立するとき、この2つの行列$A$と$B$は{\bf 可換}であ
        \coordinate (Ay) at (0,2)node [left] at (Ay) {$2$};
        \coordinate (x) at (5,0)node [right] at (x) {$x$};
        \coordinate (y) at (0,3)node [right] at (y) {$y$};
-
         \fill (A)circle(1pt) node[above]{A};
         \draw[->](-1,0)--(5,0);%x軸
         \draw[->](0,-1)--(0,3);%y軸
@@ -1425,6 +1424,78 @@ $AB=BA$が成立するとき、この2つの行列$A$と$B$は{\bf 可換}であ
 \end{equation}
 を用いればよい。
 \subsubsection{回転}
+角度$\theta$の回転を表す行列$R(\theta)$は次で与えられる。
+\begin{equation}
+  \kakko{\begin{matrix}
+    \cos \theta & -\sin \theta\\
+    \sin \theta & \cos \theta
+  \end{matrix}}
+\end{equation}
+よって、点$(x,y)$を原点に対して$\theta$だけ回転させて点$(x',y')$に移動したことを表すには
+\begin{equation}
+    \kakko{\begin{matrix}
+      x'\\
+      y'
+    \end{matrix}}=
+    \kakko{\begin{matrix}
+      \cos \theta & -\sin \theta\\
+      \sin \theta & \cos \theta
+    \end{matrix}}\kakko{\begin{matrix}
+      x\\
+      y
+    \end{matrix}}
+\end{equation}
+とかけばよい。例えば点$(1,0)$を$60$度回転させると、以下のように計算できる。
+\begin{equation}
+  \kakko{\begin{matrix}
+    \cos 60^{\circ} & -\sin 60^{\circ}\\
+    \sin 60^{\circ} & \cos 60^{\circ}
+  \end{matrix}}\kakko{\begin{matrix}
+    1\\
+    0
+  \end{matrix}}= \kakko{\begin{matrix}
+    \frac{1}{2} & -\frac{\sqrt{3}}{2}\\
+    \frac{\sqrt{3}}{2} & \frac{1}{2}
+  \end{matrix}}\kakko{\begin{matrix}
+    1\\
+    0
+  \end{matrix}}=\kakko{\begin{matrix}
+    \frac{1}{2}\\
+    \frac{\sqrt{3}}{2}
+  \end{matrix}}
+\end{equation}
+
+\begin{figure}[H]
+  \centering
+      \centering
+      \begin{tikzpicture}
+        \node (O) at (-0.5,-0.5) {O};%原点
+       \coordinate (A) at (2,0);
+       \coordinate (Ax) at (2,0)node [below] at (Ax) {$1$};
+       \coordinate (x) at (3,0)node [right] at (x) {$x$};
+       \coordinate (y) at (0,3)node [right] at (y) {$y$};
+
+        \fill (A)circle(1pt) node[above right]{A};
+        \draw[->](-1,0)--(3,0);%x軸
+        \draw[->](0,-1)--(0,3);%y軸
+        \draw[->](0,0)--(A);
+
+        \coordinate (A') at (1,1.73);
+        \coordinate (Ax') at (1,0)node [below] at (Ax') {$\frac{1}{2}$};
+        \coordinate (Ay') at (0,1.73)node [left] at (Ay') {$\frac{\sqrt{3}}{2}$};
+        \coordinate (x') at (3,0)node [right] at (x') {$x$};
+        \coordinate (y') at (0,3)node [right] at (y') {$y$};
+ 
+         \fill (A')circle(1pt) node[above]{$\mathrm{A}'$};
+         \draw[dotted](Ax')--(A');
+         \draw[dotted](Ay')--(A');
+          \draw[->](0,0)--(A');
+         \draw [dashed] (0.5,0)arc(0:60:0.5) --(0.25,0.425);
+        %  \draw [-] (2,0)arc(0:60:2) --(1,1.73);
+      \end{tikzpicture}
+\caption{点A$(1,0)$を回転させる。}
+\label{kaiten}
+\end{figure}
 \subsection{連立1次方程式}
 
 \subsubsection{基本変形}
@@ -1444,7 +1515,7 @@ $AB=BA$が成立するとき、この2つの行列$A$と$B$は{\bf 可換}であ
 \subsection{基底と次元}
 \subsubsection{基底の変換}
 \section{線形写像}
-こっちはAIのモデルでめちゃくちゃ使うらしい。
+こっちはAIのモデルでめちゃくちゃ使うらしい。いろんなデータの変換の基礎がこれ。
 \subsection{写像}
 \subsection{基本事項}
 \subsection{表現行列}
