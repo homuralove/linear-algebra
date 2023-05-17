@@ -1,4 +1,4 @@
-\documentclass[10pt]{jsarticle}
+\documentclass[10pt]{jsreport}
 \usepackage[dvipdfmx]{graphicx}
 \usepackage{braket}
 \usepackage{bm,latexsym,amsmath,amssymb,amsfonts,mathrsfs}
@@ -16,7 +16,7 @@
 \usetikzlibrary {bending}
 \input{colordvi.tex}
 \usepackage{xcolor}%色
-
+\usepackage{ulem}
 
 \usepackage{ascmac}
 \usepackage{framed}
@@ -25,6 +25,7 @@
 \tcbuselibrary{theorems,skins}
 
 \setcounter{tocdepth}{3}%目次にsubsubsectionまで入れる
+\setcounter{secnumdepth}{3}%1.a.b.cのように見出し番号をつける
 
 \theoremstyle{definition}%定理環境の定義
 \newtheorem{thm}{定理}[section]%これで(セクション番号.定理番号)という感じになる。
@@ -51,6 +52,10 @@
 \newcommand{\tr}{\mathrm{tr\,}}
 \newcommand{\rank}{\mathrm{rank\,}}
 
+
+\renewcommand{\prechaptername}{第}
+\renewcommand{\postchaptername}{部}
+%\renewcommand{\thechapter}{\roman{chapter}}
 
 \renewcommand{\theenumi}{\Alph{enumi}}%アルファベットにする
 \renewcommand{\labelenumi}{(\theenumi)}
@@ -80,9 +85,10 @@
 なお、コンピュータとを計算機と呼んでいるのはそういう文化の人間が作った資料であるためであって深い意味はない。ゆえに表現が統一されていないところもあると思う。
 このノートでは「我々が扱う空間は3次元Euclid空間であり、これは内積の定義された計量ベクトル空間である」という文章が理解できるところまで進めたら幸いと思う。
 また、目次の5章と6章あたりの内容まで理解できれば計算機を用いた機械学習などにも応用できるだろうと期待している。
-なお、このレジュメでは章立てがa.b.cのようになっているが、aを章、bを節、cを項と呼んでいる。
+なお、このレジュメでは章立て\sout{がa.b.cのようになっているが、}\textcolor{red}{を1.a.b.cのようにした。}\footnote{documentclassをjsarticleからjsreportに変えたため。5/15変更。}aを章、bを節、cを項と呼んでいる。
 \end{abstract}
 \tableofcontents
+\chapter{\underline{線形代数}}
 \setcounter{section}{-1}
 \section{数学的記法における注意}
 \subsection{集合}
@@ -1700,6 +1706,7 @@ $(2)\times2$に、(1)に-1を{\bf かけたものを加える}。すなわち、
 
 操作(\ref{operation})を列において適用する変形を{\bf 列基本変形}という。
 この行と列についての変形をあわせて{\bf 基本変形}という。
+上では拡大係数行列について変形を行ったが、もちろん普通の行列でも行なうことができる。
 $m\times n$行列$A$について、基本変形を何回か行なうことで次のような形に変形できる。
 \begin{equation}
   A\to_{\text{基本変形}}=
@@ -1739,7 +1746,7 @@ O_{m-r,r} & O_{m-r,n-r}
 ただし、階数を求めるだけであれば行基本変形のみで十分であり、階数標準形を求める必要はない。
 例えば行基本変形を繰り返して
 \begin{equation}
-  \begin{pmatrix}
+\label{rank3}  \begin{pmatrix}
     1 & * & * & * & * \\
     0 & 1 & * & * & * \\
     0 & 0 & 0 & 1 & * \\
@@ -1790,9 +1797,336 @@ O_{m-r,r} & O_{m-r,n-r}
 \end{description}
 次節で方程式の解き方を本格的に学ぶ。
 \subsubsection{方程式を解く}
-解を持つ条件。一意的な解。自明な解と自明でない解。
+%解を持つ条件。一意的な解。自明な解と自明でない解。
+次のような2元連立1次方程式を考える。
+\begin{equation}
+  \label{tokenai1}
+  \begin{cases}
+    y=-x-2\\
+    x+y=4
+  \end{cases}
+\end{equation}
+解こうとすればすぐわかるように、この方程式は{\bf 解くことができない}。
+そもそも中学数学において初めに連立方程式が出てきたのは、2つの関数の共有点を求めるときであった。
+つまり、$xy$平面上に図示すると、2つの1次関数$y=-x-2$と$x+y=4$は共有点を持たないことになる。
+また、次のような例ではどうだろうか。
+\begin{equation}
+\label{tokenai2}  \begin{cases}
+    x-2z=0\\
+    y+4z=0
+  \end{cases}
+\end{equation}
+これらの式では未知数が3つに対して与えられた方程式が2つだけなので、解くことが出来ないものとなる。
+しかし上での例とは少し性質が違っていることがわかるだろうか。
+すなわち、任意の定数$c$を用いて$z=c$とおけば
+\begin{equation}
+  x=2c,\quad y=-4c, \quad z=c
+\end{equation}
+と表すことも可能である。なお、この解をベクトルのように表して
+\begin{equation}
+  \begin{pmatrix}
+    x\\
+    y\\
+    z
+  \end{pmatrix}=c\begin{pmatrix}
+    2\\
+    -4\\
+    1
+  \end{pmatrix}
+\end{equation}
+のようにも書ける。\footnote{のちに詳しく扱うが、このとき任意定数倍すべてが解になる。この解全体の集合を\begin{equation}
+  W=\nkakko{\left. c\begin{pmatrix}
+    2\\
+    -4\\
+    1
+  \end{pmatrix} \right| c \in \mathbb{R}}
+\end{equation}のように書いて{\bf 解空間}という。}
+つまり、この連立方程式の{\bf 解は1つだけではない}\footnote{{\bf 一意でない}と表現する。}ことになる。
+ここで言いたいことは、与えられた連立方程式について、「解が存在しない」場合と「解が存在しても一意ではない」場合があるということである。
+
+以上のことを整理する。$m\times n$行列$A$、$n$次列ベクトル$\vc{x}$、$m$次列ベクトル$\vc{b}$として、連立方程式
+\begin{equation}
+\label{eq1}  A\vc{x}=\vc{b}
+\end{equation}
+を考える。この方程式について
+\begin{enumerate}
+  \item 解は存在するのか、しないのか。
+  \item 解が存在するとしたら、それは一意なのか、そうでないのか。
+\end{enumerate}
+のことを問う必要がある。
+実はこれは前述した階数を用いて述べることが可能である。
+\begin{screen}
+ \begin{thm}\label{teiri} 
+    (\ref{eq1})の解が存在する必要十分条件は拡大係数行列$(A| \vc{b })$と係数行列$A$の階数が一致することである。すなわち、
+    \begin{equation}
+      \rank(A|\vc{b})=\rank A
+    \end{equation}
+  また、一意的に解が存在するための必要十分条件は、階数が係数行列の個数に一致することである。すなわち、
+  \begin{equation}
+    \rank(A|\vc{b})=\rank A=n
+  \end{equation}
+  なお、$\rank(A|\vc{b})=\rank A<n$のとき、解は$(n-\rank A)$個の任意定数を用いて表される。
+  \end{thm}
+\end{screen}
+
+証明はしないが、上で考えた例でこの事実を確認する。
+(\ref{tokenai1})は
+\begin{equation}
+  \begin{pmatrix}
+    1 & 1\\
+    1 & 1 
+  \end{pmatrix}\begin{pmatrix}
+    x\\
+    y
+  \end{pmatrix}
+  =
+  \begin{pmatrix}
+    -2\\
+    4
+  \end{pmatrix}
+\end{equation}
+と書けることに注意。
+係数行列は行基本変形によって
+\begin{equation}
+  \begin{pmatrix}
+    1 & 1 \\
+    1 & 1 
+  \end{pmatrix}\to_{r_{2}-r_{1}}
+  \begin{pmatrix}
+    1 & 1 \\
+    0 & 0 
+  \end{pmatrix}
+\end{equation}
+より、階数1であることがわかる。
+しかし拡大係数行列は
+\begin{equation}
+  \kakko{\begin{array}{cc|c}  
+    1 & 1 & -2\\
+    1 & 1 & 4 
+   \end{array}}\to_{r_{2}-r_{1}}
+   \kakko{\begin{array}{cc|c}  
+    1 & 1 & -2\\
+    0 & 0 & 6 
+   \end{array}}
+\end{equation}
+より、階数2である。すなわち、定理\ref{teiri}より解は存在しない。
+次に(\ref{tokenai2})においても同様に行基本変形を行なう。まず方程式が
+\begin{equation}
+  \begin{pmatrix}
+    1 & 0 & -2 \\
+    0 & 1 & 4 
+  \end{pmatrix}
+  \begin{pmatrix}
+    x\\
+    y\\
+    z
+  \end{pmatrix}=\begin{pmatrix}
+    0\\
+    0
+  \end{pmatrix}
+\end{equation}
+と書ける。なお、これはもう計算するまでもない。
+係数行列の階数は2で、拡大係数行列の階数も2である。
+すなわち、この方程式の解は存在する。
+しかし係数行列の列の個数は3である。
+したがって、解は一意的ではなく、$3-2=1$個の任意定数を用いて解が表されるのであった。
+
+それではいくつか解いてみよう。
+解が存在するか、存在するなら解は一意なのか、注意して計算すること。
+\begin{description}
+  \item[例3.24] 次の連立方程式を解け。
+  \begin{equation}
+    \begin{pmatrix}
+      1 & 2\\
+      3 & 4\\
+      5 & 6
+    \end{pmatrix}
+    \begin{pmatrix}
+    x_{1}\\
+    x_{2}  
+    \end{pmatrix}=\begin{pmatrix}
+      1\\
+      1\\
+      1
+    \end{pmatrix}
+  \end{equation}
+  \item[例3.25] 次の連立方程式を解け。
+  \begin{equation}
+    \begin{pmatrix}
+      1 & 2 & 3 & 0\\
+      2 & 3 & 0 & 1\\
+      0 & 1 & 6 & -1
+    \end{pmatrix}
+    \begin{pmatrix}
+    x_{1}\\
+    x_{2}\\
+    x_{3}\\
+    x_{4}
+    \end{pmatrix}=\begin{pmatrix}
+      1\\
+      0\\
+      1
+    \end{pmatrix}
+  \end{equation}
+  \item[例3.26] 次の連立方程式を解け。
+  \begin{equation}
+    \begin{pmatrix}
+      1 & 2 & 3 & 0\\
+      2 & 3 & 0 & 1\\
+      0 & 1 & 6 & -1
+    \end{pmatrix}
+    \begin{pmatrix}
+    x_{1}\\
+    x_{2}\\
+    x_{3}\\
+    x_{4}
+    \end{pmatrix}=\begin{pmatrix}
+      1\\
+      0\\
+      2
+    \end{pmatrix}
+  \end{equation}
+\end{description}
+特別な例として(\ref{tokenai2})のように(\ref{eq1})において$\vc{b}0$のような場合がある。
+つまり
+\begin{equation}
+\label{eq2}  A\vc{x}=0
+\end{equation}
+と書かれる方程式を考える。この形の方程式を{\bf 同次}または{\bf 斉次}であるという。
+すぐに
+\begin{equation}
+  \rank (A|0)=\rank A
+\end{equation}
+であることはわかるので解は存在する。
+このとき、(\ref{eq2})において明らかに$\vc{x}=0$は解である。
+この解$\vc{x}=0$を{\bf 自明な解}という。
+同次方程式について、定理\ref{teiri}より、$\rank A= n $のときは自明な解のみが存在する。$m<n$ならば自明でない解が存在する。
+\begin{description}
+  \item[例3.27] 次の連立方程式を解け。
+  \begin{equation}
+    \begin{pmatrix}
+      1 & 2 & 3 & 0\\
+      2 & 3 & 0 & 1\\
+      0 & 1 & 6 & -1
+    \end{pmatrix}
+    \begin{pmatrix}
+    x_{1}\\
+    x_{2}\\
+    x_{3}\\
+    x_{4}
+    \end{pmatrix}=\begin{pmatrix}
+      0\\
+      0\\
+      0
+    \end{pmatrix}
+  \end{equation} 
+\end{description}
+
+ところで非同次な方程式
+\begin{equation}
+  A\vc{x}=\vc{b}
+\end{equation}
+の解を求めたい時、もちろんきちんと手順を追えば解けるのだが、方程式を満たす解が1つ見つかったとすると少し簡単になる。
+これを$\vc{x}_{0}$とおく。
+この解を{\bf 特殊解}という。
+一方でこの方程式において$\vc{b}=0$とおいた同次形の方程式を考える。
+\begin{equation}
+  A\vc{x}=0
+\end{equation}
+これを満たす解を$\vc{x}_{1}$とする。\footnote{一般に同次形のほうが簡単に解ける。拡大係数行列は考えなくて良いため。}
+もとの非同次方程式の任意の解({\bf 一般解})は
+\begin{equation}
+  \vc{x}=\vc{x}_{0}+\vc{x}_{1}
+\end{equation}
+で与えられる。
+
+連立方程式に関する練習問題を用意してある。
+\begin{description}
+  \item[例3.28] 次の連立方程式において、係数行列と拡大係数行列の階数を求め、解を求めよ。  
+  \begin{equation}
+    \begin{pmatrix}
+      1 & 2\\
+      3 & 4\\
+      5 & 6
+    \end{pmatrix}
+    \begin{pmatrix}
+    x_{1}\\
+    x_{2}  
+    \end{pmatrix}=\begin{pmatrix}
+      1\\
+      1\\
+      1
+    \end{pmatrix}
+  \end{equation}
+  \item[例3.29] 次の連立方程式において、係数行列と拡大係数行列の階数を求め、解を求めよ。  
+  \begin{equation}
+    \begin{pmatrix}
+      1 & 1 & -2 \\
+      1 & -2 & 1 \\
+      -2 & 1 & 1
+    \end{pmatrix}
+    \begin{pmatrix}
+    x_{1}\\
+    x_{2}\\
+    x_{3}
+    \end{pmatrix}=\begin{pmatrix}
+      0\\
+      3\\
+      -3
+    \end{pmatrix}
+  \end{equation} 
+  \item[例3.30] 次の連立方程式において、係数行列と拡大係数行列の階数を求め、解を求めよ。  
+  \begin{equation}
+    \begin{pmatrix}
+      1 & 2 & 3 & 4  \\
+      2 & 3 & 4 & 1 \\
+      0 & 1 & 2 & 7
+    \end{pmatrix}
+    \begin{pmatrix}
+    x_{1}\\
+    x_{2}\\
+    x_{3}\\
+    x_{4}
+    \end{pmatrix}=\begin{pmatrix}
+      1\\
+      0\\
+      1
+    \end{pmatrix}
+  \end{equation} 
+\end{description}
 \subsubsection{正則行列・逆行列}
-正則性とその言い換え。
+%正則性とその言い換え。
+普通の数について、{\bf 逆数}とは0ではない数$a$に対してかけて1になる数$a^{-1}$のことをいう。
+行列の世界で1に対応するものは単位行列$I$である。
+したがって、ある行列$A$にかけて単位行列$I$になるような行列$B$があればそれを逆行列ということができるだろう。
+すなわち、$n$次正方行列$A$に対して\footnote{行列$A$と$B$があるとき、積は$AB$と$BA$の2つが定義できるため、どちらに対しても単位行列となってほしい。また、正方行列でないと順序を入れかえた積を定義できない。}、
+\begin{equation}
+\label{gyaku}  AB=BA=I_{n}
+\end{equation}
+となるような$n$次行列$B$があるとき、その行列$B$を{\bf 逆行列}といい
+\begin{equation}
+  B=A^{-1}
+\end{equation}
+と表す。なお、普通の数と違い、もとの行列がゼロ行列でなくても逆行列が存在しないことがある。
+逆行列が存在する行列$A$のことを{\bf 正則}であるといい、$A$を{\bf 正則行列}という。
+ちなみに(\ref{gyaku})では積の順序を入れ替えたどちらもが単位行列となるようにしたが、実は$AB=I_{n}$または$BA=I_{n}$の{\bf 少なくとも一方が満たされる}ならばその$B$は$A$の逆行列である。
+\begin{description}
+  \item[2次正方行列の例] 2次正方行列
+  \begin{equation}
+    A=\begin{pmatrix}
+      a & b \\
+      c & d
+    \end{pmatrix}
+  \end{equation}
+  の逆行列が存在する必要十分条件は$ad-bc\neq 0$である。なお、このとき逆行列は
+  \begin{equation}
+    A^{-1}=\frac{1}{ad-bc}\begin{pmatrix}
+      d & -b\\
+      -c & a
+    \end{pmatrix}
+  \end{equation}
+  である。
+\end{description}
 \subsection{行列式}
 行列式のイメージとその性質。Sarrusの方法と余因子展開で帰納的に定義する。
 \subsubsection{余因子展開}
@@ -1822,9 +2156,167 @@ O_{m-r,r} & O_{m-r,n-r}
 \subsubsection{一般の変換において}
 \subsection{対角化}
 ここまでできればその辺の理系学生より優秀。
+
+\appendix
+\chapter{\underline{おまけ:ランダム行列}}
+おまけとして、近年数学だけでなく物理学の観点からも活発に研究されている{\bf ランダム行列}について述べる。
+ランダム行列は様々な分野と関係しており、量子情報や量子重力に関係する物理学だけでなく、金融工学、情報理論など、枚挙に暇がない。
+ここでは私の研究分野である、2次元の重力理論を記述するJackiw-Teitelboim(JT)重力理論やSachdev-Ye-Kitaev(SYK)模型に関わる話まで持っていきたい。
+勉強しながら備忘録代わりにメモを取っているので注意。
+
+主に木村\cite{randam-kimura}をもとにしている。
+さらっと読んだ感じ、かなり物理学への応用に重点を置いているようである。
+渡辺 et al.による入門書\cite{randam-wnktn}では、それよりも平易な言葉で書かれており、情報系や機械学習の理論についても触れているので、こちらを読んでもいいかもしれない。
+\section{基本の話}
+行列要素が乱数であるような行列を{\bf ランダム行列}という。
+ただし、あまりに乱雑すぎても取り扱いが難しくなるため、様々な対称性を課すこととなる。
+ここではHermite共役性を持つ$N$次の複素行列、すなわち{\bf 複素Hermiteランダム行列}を考える。
+Hermite行列は行列要素$H_{ij}\in \mathbb{C}$が
+\begin{equation}
+  H_{ij}=H_{ji}^{*}
+\end{equation}
+であるような行列である。
+この定義から対角要素は$H_{ii}=H_{ii}^{*}$となるため、実数である。
+\begin{equation}
+  H_{ii}\in \mathbb{R}
+\end{equation}
+なお、ある行列の{\bf Hermite共役}(随伴)とは転置を取って複素共役を取ることである。これを$\dagger$を用いて表す。
+\begin{equation}
+  {}^{t}\!A^{*}=A^{\dagger}
+\end{equation}
+Hermite行列とは$A=A^{\dagger}$となる行列と言える。
+\subsection{積分測度}
+初めに扱う模型は、Gauss型ユニタリ集団(gaussian Unitary Ensemble, GUE)である。行列$H$が実現する確率分布を、Gauss分布に従うとして
+\begin{equation}
+  P(H)dH==\frac{1}{Z_{N}}e^{-\frac{1}{2}\Tr H^{2}}dH
+\end{equation}
+と定義する。
+ここで規格化定数
+\begin{equation}
+  Z_{N}=\int e^{-\frac{1}{2}\Tr H^{2}}dH
+\end{equation}
+は{\bf 分配関数}と呼ばれる。
+これによって確率分布は規格化条件
+\begin{equation}
+  \int P(H)dH=1
+\end{equation}
+を満たすようになる。
+連続分布としているので、行列(演算子)$\mathcal{O}$の期待値は積分を用いて
+\begin{equation}
+  \braket{\mathcal{O}}=\int dH P(H)\mathcal{O}(H)
+\end{equation}
+で定められる。
+ここで$dH$はLebesgue測度で、
+\begin{equation}
+  dH=\prod_{i=1}^{N}dH_{ii}\prod_{i< j}dH_{ij}^{(0)}dH_{ij}^{(1)}
+\end{equation}
+のように書かれる。ただし$H_{ij}^{(0)}:=\Re H_{ij},\, H_{ij}^{(1)}:=\Im H_{ij}$である。
+
+固有値を用いて書けるとうれしい。行列$H$がユニタリ行列$U\in U(N)$で対角化されることを考える。 
+すなわち、対角行列$X=\mathrm{diag}(x_{1},\cdots,x_{N})$を用いて、
+\begin{equation}
+  H=UXU^{\dagger}
+\end{equation}
+と書ける。なお、対角化したときの対角成分はもとの行列の固有値であり、Hermite性より実数であることに注意せよ。
+このときトレースの巡回性より
+\begin{equation}
+  Tr H^{2}= \Tr (UXU^{\dagger})(UXU^{\dagger})=\Tr X^{2}=\sum_{i=1}^{N}x_{i}^{2}
+\end{equation}
+である。
+測度について
+\begin{equation}
+  dH=d(UXU^{\dagger})=dUXU^{\dagger}+UdXU^{\dagger}+UXdU^{\dagger}
+\end{equation}
+また左右に$D^{\dagger},U$をかけて
+\begin{equation}
+  U^{\dagger}dHU=U^{\dagger}(dUXU^{\dagger}+UdXU^{\dagger}+UXdU^{\dagger})U=dX + U^{\dagger}dU X+XdU^{\dagger}U
+\end{equation}
+ここで$U^{\dagger}U=I$より$dU^{\dagger}U+U^{\dagger}dU=0$を用いると
+\begin{equation}
+  U^{\dagger}dHU=dX + U^{\dagger}dU X-XU^{\dagger}dU
+\end{equation}
+これを成分で書きあらわすと
+\begin{equation}
+\label{116}  (U^{\dagger}dHU)_{ij}=dx_{i}\delta_{ij} +(x_{j}-x_{i}) (U^{\dagger}dU)_{ij}
+\end{equation}
+ただし
+\begin{equation}
+  (U^{\dagger}dU)_{ik} X_{kj}-X_{ik}(U^{\dagger}dU)_{kj}=(U^{\dagger}dU)_{ik} x_{k}\delta_{kj}-x_{i}\delta_{ik}(U^{\dagger}dU)_{kj}
+\end{equation}
+であることを用いている。
+さらに、微分形式とウェッジ積を導入することを考える。$N^{2}$形式$\omega_{N}$を
+\begin{equation}
+  \omega_{N}=\bigwedge_{i=1}^{N}dH_{ii}\bigwedge_{i<j , \, \alpha=0,1}dH_{ij}^{(\alpha)}
+\end{equation}
+と定めると行列積分を
+\begin{equation}
+  \int dH=\int \omega_{N}
+\end{equation}
+と書ける。ここで(\ref{116})を外微分を施した時の偏微分たる係数と思い、また$U^{\dagger}dHU=dH$であるから
+\begin{equation}
+  \omega_{N}=\prod_{i<j}^{N}|x_{j}-x_{i}|^{2}\bigwedge_{i=1}^{N}dx_{i}\bigwedge_{i<j , \, \alpha=0,1}(U^{\dagger}dU)_{ij}^{(\alpha)}
+\end{equation}
+この相似変換におけるヤコビアンは
+\begin{equation}
+  |\Delta_{N}(X)|^{2}:=\prod_{i<j}^{N}|x_{j}-x_{i}|^{2}
+\end{equation}
+で与えられ、Vandermonde行列式と呼ばれる。
+
+以上のように固有値と対角化された行列による表示が導かれたのでまとめると、確率分布は
+\begin{equation}
+  P(H)dH=P(X)dXdU
+\end{equation}
+で与えられ、ここで
+\begin{equation}
+  P(X)=\frac{1}{Z_{N}}e^{-\frac{1}{2}\sum_{i=1}^{N}x_{i}^{2}}\prod_{i<j}^{N}|x_{j}-x_{i}|^{2}
+\end{equation}
+であり、測度は以下のように略記している。
+\begin{equation}
+  dX:=\bigwedge_{i=1}^{N}dx_{i}, \quad dU:=\bigwedge_{i<j , \, \alpha=0,1}(U^{\dagger}dU)_{ij}^{(\alpha)}
+\end{equation}
+固有値による表示を観察してみる。
+固有値が近づくと$P(X)$は小さくなり、特に縮退している場合はゼロとなる。
+固有値どうしが離れている方が寄与は大きくなるが、しかし共通の因子$e^{-\frac{1}{2}x^{2}}$によって原点付近へ束縛もされる。
+この競合によって、行列サイズを大きく取る極限で興味深い統計法則が生まれる。
+なお、ここで確率分布は$U(N)$変換で不変である。このような群不変測度のことをHaar測度という。
+\subsection{分配関数}
+具体的に分配関数
+\begin{equation}
+  Z_{N}=\int e^{-\frac{1}{2}\Tr H^{2}}dH
+\end{equation}
+を求める。肩のトレースについて
+\begin{align}
+  \Tr H^{2}=\sum_{i,j} \underbrace{H_{ij}H_{ji}}_{|H_{ij}|^{2}} &= \sum_{i}H_{ii}^{2}+\sum_{i\neq j}|H_{ij}|^{2}\notag \\
+  &=\sum_{i}H_{ii}^{2}+2\sum_{i<j}|H_{ij}|^{2}\notag\\
+  &=\sum_{i}H_{ii}^{2}+2\sum_{i<j,\alpha=0,1}\kakko{H_{ij}^{(\alpha)}}^{2}\\
+\end{align}
+であるから、これと測度
+\begin{equation}
+  dH=\prod_{i=1}^{N}dH_{ii}\prod_{i< j,\alpha=0,1}dH_{ij}^{(\alpha)}
+\end{equation}
+をあわせてやると
+\begin{equation}
+  Z_{N}=\int e^{-\frac{1}{2}\Tr H^{2}}dH=\int \prod_{i=1}^{N}e^{-\frac{1}{2}H_{ii}^{2}}dH_{ii}\prod_{i< j,\alpha=0,1}e^{-\kakko{H_{ij}^{(\alpha)}}^{2}}dH_{ij}^{(\alpha)}
+\end{equation}
+となる。これはGauss積分
+\begin{equation}
+  \int e^{-ax^{2}}dx=\sqrt{\frac{\pi}{a}}
+\end{equation}
+を用いて計算できる。よって
+\begin{equation}
+  Z_{N}=\kakko{\int e^{-\frac{1}{2}H_{ii}^{2}}dH_{ii}}^{N} \kakko{\int e^{-\kakko{H_{ij}^{(\alpha)}}^{2}}dH_{ij}^{(\alpha)}}^{N(N-1)}=(2\pi)^{N/2}\pi^{N(N-1)/2}
+\end{equation}
+\section{Coulomb気体の方法}
+行列サイズ$N$を大きくした時の漸近的な振る舞いを調べるために、固有値を荷電粒子とみなした平衡状態としての固有値分布を議論する{\bf Coulomb気体の方法}を導入する。
+かなり物理的な取り扱いをするため、数学的な議論するには向かない。
+
+\chapter{\underline{おまけ:微分形式}}
+自分用メモその2
 \begin{thebibliography}{99}
-  \bibitem{L-fujioka} 藤岡敦,手を動かして学ぶ線形代数,[裳華房,2017(第2版)]
-  \bibitem{L-isimura} 石村園子,改訂版 すぐわかる線形代数,[東京図書,2012(改訂版)]
-  \bibitem{L-nakanishi} 中西崇文,Pythonハンズオンによるはじめての線形代数,[森北出版,2021]
+  \bibitem{L-fujioka} 藤岡敦, 手を動かして学ぶ線形代数, [裳華房,2017(第2版)]
+  \bibitem{L-isimura} 石村園子, 改訂版 すぐわかる線形代数, [東京図書,2012(改訂版)]
+  \bibitem{L-nakanishi} 中西崇文, Pythonハンズオンによるはじめての線形代数, [森北出版,2021]
+  \bibitem{randam-kimura} 木村太郎, ランダム行列の数理, [森北出版,2021]
+  \bibitem{randam-wnktn} 渡辺澄夫, 永尾太郎, 樺島祥介, 田中利幸, 中島伸一, ランダム行列の数理と科学, [森北出版,2014]
 \end{thebibliography}
 \end{document}
