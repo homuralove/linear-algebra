@@ -1,5 +1,5 @@
 \documentclass[10pt]{jsreport}
-\usepackage[dvipdfmx]{graphicx}
+\usepackage{graphicx}
 \usepackage{braket}
 \usepackage{bm,latexsym,amsmath,amssymb,amsfonts,mathrsfs}
 \usepackage{amsthm}
@@ -9,7 +9,7 @@
 %\usepackage{physics}
 \usepackage[dvipdfmx,linktocpage=true]{hyperref}
 \usepackage{pxjahyper}
-\usepackage{color}
+\usepackage[dvipdfmx]{color}
 \usepackage{here}
 \usepackage{tikz}
 \usetikzlibrary {arrows.meta}
@@ -1709,7 +1709,7 @@ $(2)\times2$に、(1)に-1を{\bf かけたものを加える}。すなわち、
 上では拡大係数行列について変形を行ったが、もちろん普通の行列でも行なうことができる。
 $m\times n$行列$A$について、基本変形を何回か行なうことで次のような形に変形できる。
 \begin{equation}
-  A\to_{\text{基本変形}}=
+\label{kaisu}  A\to_{\text{基本変形}}=
   \kakko{\begin{array}{c|c} 
 I_{r} & O_{r,n-r}\\ \hline
 O_{m-r,r} & O_{m-r,n-r}
@@ -2096,6 +2096,33 @@ O_{m-r,r} & O_{m-r,n-r}
 \end{description}
 \subsubsection{正則行列・逆行列}
 %正則性とその言い換え。
+次の例題について考えてみよう。
+\begin{description}
+  \item[例3.31] 以下の連立方程式
+  \begin{equation}
+    \begin{pmatrix}
+      1 & 2\\
+      2 & 3
+    \end{pmatrix}
+    \begin{pmatrix}
+      x\\
+      y
+    \end{pmatrix}=
+    \begin{pmatrix}
+      2\\
+      -1
+    \end{pmatrix}
+  \end{equation}
+  を解け。どう解いてもよい。次に行列
+  \begin{equation}
+    \begin{pmatrix}
+      3 & -2\\
+      -2 & 1
+    \end{pmatrix}
+  \end{equation}
+  を両辺の左側からかけて、結果を見よ。
+\end{description}
+
 普通の数について、{\bf 逆数}とは0ではない数$a$に対してかけて1になる数$a^{-1}$のことをいう。
 行列の世界で1に対応するものは単位行列$I$である。
 したがって、ある行列$A$にかけて単位行列$I$になるような行列$B$があればそれを逆行列ということができるだろう。
@@ -2120,16 +2147,312 @@ O_{m-r,r} & O_{m-r,n-r}
   \end{equation}
   の逆行列が存在する必要十分条件は$ad-bc\neq 0$である。なお、このとき逆行列は
   \begin{equation}
-    A^{-1}=\frac{1}{ad-bc}\begin{pmatrix}
+  \label{inv}  A^{-1}=\frac{1}{ad-bc}\begin{pmatrix}
       d & -b\\
       -c & a
     \end{pmatrix}
   \end{equation}
   である。
+  \item[例3.32] $AA^{-1}=I_{n}$また$A^{-1}A=I_{n}$となっていることを確認せよ。
+  \item["変換"としての意味] ある変換に対する逆の変換に対応する。つまり、変換前のデータを取り出す操作である。逆行列の存在しない行列による変換は、不可逆な変換に対応すると考えられるだろう。
+\end{description}
+
+なお、逆行列は存在すればそれは一意である\footnote{一意である、すなわちこれが唯一のものであるということを示すには、2つあることを仮定して議論を進め、結局それらが等しかったというふうにすればよい。}。
+これを示そう。$n$次正則行列$A$の逆行列を$B,C$とする。
+どちらも逆行列であるのだから
+\begin{align}
+ \label{ba} AB=BA&=I_{n}\\
+  \label{ca} AC=CA&=I_{n}
+\end{align}
+を満たす。いま$B=C$であれば逆行列が一意であることを示せたことになる。
+\begin{align}
+  B=BI_{n}=B(AC) \quad & (\because \text{\ref{ca}})\\
+  =(BA)C \quad & (\because \text{積の結合律})\\
+=I_{n}C =C \quad & (\because \text{\ref{ba}})
+\end{align}
+以上より$B=C$が言えたので、逆行列は存在すれば一意である。
+\subsubsection{正則性とその言い換え}
+逆行列が存在する行列のことを正則な行列であると述べたが、この正則性には同値な言い換えがいくつかある。
+\begin{screen}
+  \begin{thm}
+    $n$次の正方行列$A$について、以下の条件はすべて同値である。
+    \begin{enumerate}
+      \item $A$が正則。
+      \item $\rank A=n$
+      \item $A$の階数標準形は単位行列である。((\ref{kaisu})参照)
+      \item 同次連立1次方程式$A\vc{x}=0$の解は自明な解のみである。
+      \item 任意の$n$次列ベクトル$\vc{b}$に対して、連立1次方程式$A\vc{x}=\vc{b}$の解が一意的に存在する。
+    \end{enumerate}
+  \end{thm}
+\end{screen}
+
+これらの条件はそれぞれが互いに必要十分である。ここでは示さないので、藤岡\cite{L-fujioka}などを参照のこと。
+この定理があるので任意の正則行列は基本変形を繰り返すことで逆行列を求められる。
+\begin{equation}
+  (A|I_{n})\to (I_{n}|A^{-1})
+\end{equation}
+となる。方法は拡大係数行列と同じであり、左側の部分で基本変形を行い、単位行列になったら、右側の部分が逆行列である。
+\begin{description}
+  \item[例3.33] 基本変形を行うことで
+  \begin{equation}
+    A=\begin{pmatrix}
+      1 & 1 & 0\\
+      1 & 1 & 1 \\
+      0 & 1 &1
+    \end{pmatrix}
+  \end{equation}
+  の逆行列$A^{-1}$が
+  \begin{equation}
+   A^{-1}= \begin{pmatrix}
+      0 & 1 & -1\\
+      1 & -1 & 1 \\
+      -1 & 1 & 0 
+    \end{pmatrix}
+  \end{equation}
+  であることを確認し、また、$AA^{-1}=I_{n}$であることを確認せよ。
+\end{description}
+逆行列について基本的な性質を示す定理を述べておく。
+\begin{screen}
+  \begin{thm}
+    $n$次正則行列$A,B$について、以下が成り立つ。
+    \begin{enumerate}
+      \item $(A^{-1})^{-1}=A$
+      \item $({}^{t}\!A)^{-1}={}^{t}\!(A^{-1})$
+      \item $(AB)^{-1}=B^{-1}A^{-1}$
+    \end{enumerate}
+  \end{thm}
+\end{screen}
+「かけて単位行列になる」という逆行列の意味を知ればこれらを示すことができるだろう。
+いくつか逆行列を求めてみよう。2次の逆行列は(\ref{inv})で与えられるので、3次行列を考える。
+\begin{description}
+  \item[例3.34] 次の行列の逆行列を求め、もとの行列との積が単位行列になることを確かめよ。
+  \begin{equation}
+    (\mathrm{A})\quad \begin{pmatrix}
+      1 & a & b\\
+      0 & 1 & c \\
+      0 & 0 & 1    
+    \end{pmatrix}\quad ,\quad \quad
+     (\mathrm{B})\quad \begin{pmatrix}
+      1 & 1 & 1\\
+      1 & 1 & 2 \\
+      1 & 2 & 1    
+    \end{pmatrix}
+  \end{equation}
 \end{description}
 \subsection{行列式}
-行列式のイメージとその性質。Sarrusの方法と余因子展開で帰納的に定義する。
-\subsubsection{余因子展開}
+%行列式のイメージとその性質。Sarrusの方法と余因子展開で帰納的に定義する。
+%行列式って何？
+行列とは数字を長方形に並べたものであった。
+その中でも、$n$次正方行列$A$について考える。
+この{\bf 行列式}は、配列である行列と普通の数をある規則によって対応させるものである。
+その規則は後述するが、その対応させた数を$n$次の行列式といい、
+\begin{equation}
+  \det A , \quad |A|
+\end{equation}
+などと表す。なお、行列のノルム\footnote{行列のノルムはベクトルのノルム(これも後に詳しく述べる。)を拡張した概念であり、全く別物である。}とは別の概念であり、紛らわしいのでここでは$\det A$の記法を用いる。
+では、なぜノルムとは言わないのに行列と数を対応させる行列式を定義するのだろうか。すぐに思いつくものとして以下のような動機がある。
+\begin{enumerate}
+  \item 逆行列の定義に必要である。
+  \item 連立方程式に深く関わる量である。
+  \item 行列をベクトルの配列とみなしたときの図形的意味がキレイである。
+  \item 後述する線形変換の一つの特徴づけとなる。
+\end{enumerate}
+特に、(A),(B)についてはどのような規則をもって行列式の定義とするかを教えてくれる。
+そこで要請される条件は(1)線形性があること、(2)行や列に対する反対称性(交代性)があること、である。
+例えば2次行列 
+\begin{equation}
+A=\begin{pmatrix}
+  a & b \\
+  c & d
+\end{pmatrix}  
+\end{equation}
+に対する行列式は
+\begin{equation}
+  \det A =ad- bc
+\end{equation}
+によって定義されるが、この$\det A$は2元連立方程式を解く際に必ず現れる量である。
+歴史的には連立方程式を調べるために導入されたため行列より早く生まれた概念である。
+もちろん3次以上についても研究されており、そこから上のような要請が生まれた。
+
+なお、通常行列式の定義には置換\footnote{ざっくり言えば「入れ替え」のこと。その中でも「隣同士の入れ替え」(互換という)を何度行ったかによって符号を決める符号関数$\mathrm{sgn}$を用いる。
+偶数回であれば偶置換といい符号を正とし、奇数回であれば奇置換といい符号は負である。
+また、このような性質を持つ量としてLevi-Civita記号(Eddingtonのイプシロンともいう)$\epsilon_{ijk\ldots}$がある。
+これは完全反対称テンソルとの別名があり、その意味は前述の符号関数の性質とほぼ同じである。}を用いる他、様々な定義があるが、初学者や専門外の者からすればとっつきづらいので別の"定義"を与える。他の書籍を参照すること。
+
+ここではまず1,2,3次の行列式を"定義"\footnote{くどいようだが、本来の定義の仕方ではないことに注意。ここでのやり方は実際には定理である。}し、高次の行列式はそれらを用い、後述の余因子展開によって再帰的に定義することとする。
+
+\begin{description}
+  \item[1次の行列式] 1次行列$A=(a)$について
+  \begin{equation}
+  \det A = a  
+  \end{equation}
+と定める。
+\item[2次の行列式] 2次行列 
+\begin{equation}
+A=\begin{pmatrix}
+  a & b \\
+  c & d
+\end{pmatrix}  
+\end{equation}
+に対して
+\begin{equation}
+  \det A =ad- bc
+\end{equation}
+と定める。なお、2次逆行列の公式(\ref{inv})でも同じ形が出ていることに注意。実際に関係があることを後に見る。また、連立方程式とも深く関わっている。
+\item[3次の行列式] 3次行列 
+\begin{equation}
+A=\begin{pmatrix}
+  a_{11} & a_{12} & a_{13} \\
+  a_{21} & a_{22} & a_{23} \\
+  a_{31} & a_{32} & a_{33}
+\end{pmatrix}  
+\end{equation}
+に対して
+\begin{equation}
+  \det A =a_{11}a_{22}a_{33}+a_{13}a_{21}a_{32}+a_{12}a_{23}a_{31}-a_{13}a_{22}a_{31}-a_{11}a_{23}a_{32}-a_{12}a_{21}a_{33}
+\end{equation}
+と定める。複雑に見えるが、以下で計算法則を与えるので実際にはそれほどではない。
+\end{description}
+2次、3次の行列式の計算に用いる法則はSarrusの方法である。
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\linewidth]{img/fig1.png}
+  \caption{Sarrusの方法のイメージ。左は2次、右は3次。赤引く青である。}
+  \label{fig1}
+\end{figure}
+
+\begin{screen}
+\begin{thm}{\bf Sarrusの方法}。言葉で言えば左斜めに取った積の和引く右斜めに取った積の和である。
+2次では
+\begin{equation}
+  \begin{pmatrix}
+   \fbox{$a$}  & b \\
+    c & \fbox{$d$}
+  \end{pmatrix}[\text{左斜めの積}],\quad \begin{pmatrix}
+    a & \fbox{$b$} \\
+    \fbox{$c$} & d
+  \end{pmatrix}[\text{右斜めの積}]
+\end{equation}
+なので
+\begin{equation}
+  \det A = ad-bc
+\end{equation}
+となる。3次ではまず正の符号となる左斜めの積は
+\begin{equation}
+\label{s-plus}  \begin{pmatrix}
+    \fbox{$a_{11}$} & a_{12} & a_{13} \\
+    a_{21} & \fbox{$a_{22}$} & a_{23} \\
+    a_{31} & a_{32} & \fbox{$a_{33}$}
+  \end{pmatrix} ,\quad \begin{pmatrix}
+    a_{11} & a_{12} & \fbox{$a_{13}$} \\
+    \fbox{$a_{21}$} & a_{22} & a_{23} \\
+    a_{31} & \fbox{$a_{32}$} & a_{33}
+  \end{pmatrix} , \quad \begin{pmatrix}
+    a_{11} & \fbox{$a_{12}$} & a_{13} \\
+    a_{21} & a_{22} & \fbox{$a_{23}$} \\
+    \fbox{$a_{31}$} & a_{32} & a_{33}
+  \end{pmatrix}  
+\end{equation}
+負の符号となる右斜めの積は
+\begin{equation}
+\label{s-minus}  \begin{pmatrix}
+    a_{11} & a_{12} & \fbox{$a_{13}$} \\
+    a_{21} & \fbox{$a_{22}$} & a_{23} \\
+    \fbox{$a_{31}$} & a_{32} & a_{33}
+  \end{pmatrix} ,\quad \begin{pmatrix}
+    \fbox{$a_{11}$} & a_{12} & a_{13} \\
+    a_{21} & a_{22} & \fbox{$a_{23}$} \\
+    a_{31} & \fbox{$a_{32}$} & a_{33}
+  \end{pmatrix} , \quad \begin{pmatrix}
+    a_{11} & \fbox{$a_{12}$} & a_{13} \\
+    \fbox{$a_{21}$} & a_{22} & a_{23} \\
+    a_{31} & a_{32} & \fbox{$a_{33}$}
+  \end{pmatrix}  
+\end{equation}
+である。
+\begin{description}
+  \item[例3.35] (\ref{s-plus})と(\ref{s-minus})を参考に、Sarrusの方法が実際に
+  \begin{equation}
+    \det A =a_{11}a_{22}a_{33}+a_{13}a_{21}a_{32}+a_{12}a_{23}a_{31}-a_{13}a_{22}a_{31}-a_{11}a_{23}a_{32}-a_{12}a_{21}a_{33}
+  \end{equation}
+  を与えることを示せ。
+\end{description}
+なお、この「かけて引く」という方法は4次以降の高次では通用しないので注意すること。そのあたりは\ref{yoinshi}節で扱う。
+\end{thm}
+\end{screen}
+実際に計算してみよう。
+\begin{description}
+  \item[例3.36] 次の行列の行列式の値を求めよ。
+  \begin{equation}
+    A=(3) ,\quad B= \begin{pmatrix}
+      1 & 2 \\
+      3 & 4 
+    \end{pmatrix},\quad C=\begin{pmatrix}
+      -1 & 0 \\
+      0 & 1 
+    \end{pmatrix}
+  \end{equation}
+  \item[例3.37] 次の行列の行列式の値を求めよ。
+  \begin{equation}
+    A= \begin{pmatrix}
+      1 & -5 & 6 \\
+      -3 & 0 & 1 \\
+      2 & 4 & -2
+    \end{pmatrix},\quad B=\begin{pmatrix}
+      1 & 4 & 7 \\
+      2 & 5 & 8 \\
+      3 & 6 & 9
+    \end{pmatrix}
+  \end{equation}
+\end{description}
+ここで、はじめに要請した線形性と反対称性について確認しておく。
+\begin{description}
+  \item[例3.38] 次の行列の行列式の値を求め、線形性と反対称性を確かめよ。まずは線形性である。ある列を$k$倍したとき行列式も$k$倍になることと、またある列が和の形となっているときに"そこだけ分けて"和とすればよいことをいう。行についても同様の性質が成り立つ。
+  \begin{equation}
+    A_{k}= \begin{pmatrix}
+      k & -5 & 6 \\
+      -3k & 0 & 1 \\
+      2k & 4 & -2
+    \end{pmatrix}\quad \to \quad \det A_{k}=k\det A
+  \end{equation}
+  \begin{equation}
+    A_{p}= \begin{pmatrix}
+      1 & -5+2 & 6 \\
+      -3 & 0+3 & 1 \\
+      2 & 4+5 & -2
+    \end{pmatrix}\to \det A_{p}=\det \begin{pmatrix}
+      1 & -5 & 6 \\
+      -3 & 0 & 1 \\
+      2 & 4 & -2
+    \end{pmatrix}+\det \begin{pmatrix}
+      1 & 2 & 6 \\
+      -3 & 3 & 1 \\
+      2 & 5 & -2
+    \end{pmatrix}
+  \end{equation}
+  次に反対称性を確かめる。
+  \begin{equation}
+    A_{ic}= \begin{pmatrix}
+      1 &  6& -5 \\
+      -3 & 1 & 0 \\
+      2 & -2& 4
+    \end{pmatrix},\quad A_{ir}= \begin{pmatrix}
+      -3 & 0 & 1 \\
+      1 &  -5 &  6 \\
+      2 & 4 & -2
+    \end{pmatrix}
+  \end{equation}
+  としたとき$\det A_{ic}=-\det A$と$\det A_{ir}= -\det A$。こちらも、行についても同じ主張が成り立つ。
+\item[例3.39] 行列式は行や列についての反対称性があるため、全く同じ行や列があるとき値がゼロになる。以下の行列の行列式を計算してこれを確認せよ。 \begin{equation}
+  A= \begin{pmatrix}
+    1 & -5 & 6 \\
+    1 & -5 & 6 \\
+    2 & 4 & -2
+  \end{pmatrix}
+\end{equation}
+\end{description}
+
+\subsubsection{余因子展開}\label{yoinshi}
 \subsubsection{外積}
 \subsubsection{Cayley-Hamiltonの定理}
 行列の$n$乗を計算する際、{\bf かける回数を減らせる}定理である。
